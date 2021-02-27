@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "cepan"
+version = "0.1.0"
+description = "cepan is a client library that retrieves data from aws cost explore as a pandas dataframe."
+authors = ["kanga333 <e411z7t40w@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
