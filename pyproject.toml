@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.9"
 pandas = "^1.2.3"
+boto3 = "^1.17.19"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

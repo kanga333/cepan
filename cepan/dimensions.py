@@ -1,3 +1,7 @@
+import datetime
+from typing import Any, Dict, List, Optional
+
+import boto3
 import pandas as pd
 
 _DIMENSIONS = [
@@ -37,3 +41,25 @@ _DIMENSIONS = [
 
 def get_dimensions() -> pd.DataFrame:
     return pd.DataFrame(_DIMENSIONS, columns=["dimensions"])
+
+
+def get_dimension_values(
+    dimension: str,
+    start: datetime.date,
+    end: datetime.date = datetime.date.today(),
+    search_string: Optional[str] = None,
+) -> pd.DataFrame:
+    args: Dict[str, Any] = {
+        "TimePeriod": {"Start": start.isoformat(), "End": end.isoformat()},
+        "Dimension": dimension,
+    }
+    client: boto3.clientdimension = boto3.client("ce")
+    response: Dict[str, Any] = client.get_dimension_values(**args)
+    pre_df: List[Dict[str, str]] = []
+    for row in response["DimensionValues"]:
+        if not row["Value"]:
+            continue
+        pre_row: Dict[str, str] = {"dimension": dimension}
+        pre_row["value"] = row["Value"]
+        pre_df.append(pre_row)
+    return pd.DataFrame(pre_df, dtype="string")
