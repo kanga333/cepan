@@ -53,7 +53,7 @@ def get_dimension_values(
         "TimePeriod": {"Start": start.isoformat(), "End": end.isoformat()},
         "Dimension": dimension,
     }
-    client: boto3.clientdimension = boto3.client("ce")
+    client: boto3.client = boto3.client("ce")
     response: Dict[str, Any] = client.get_dimension_values(**args)
     pre_df: List[Dict[str, str]] = []
     for row in response["DimensionValues"]:
