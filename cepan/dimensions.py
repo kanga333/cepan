@@ -4,6 +4,8 @@ from typing import Any, Dict, List, Optional
 import boto3
 import pandas as pd
 
+from cepan import _utils
+
 _DIMENSIONS = [
     "AZ",
     "INSTANCE_TYPE",
@@ -48,12 +50,13 @@ def get_dimension_values(
     start: datetime.date,
     end: datetime.date = datetime.date.today(),
     search_string: Optional[str] = None,
+    session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
+    client: boto3.client = _utils.client("ce", session)
     args: Dict[str, Any] = {
         "TimePeriod": {"Start": start.isoformat(), "End": end.isoformat()},
         "Dimension": dimension,
     }
-    client: boto3.client = boto3.client("ce")
     response: Dict[str, Any] = client.get_dimension_values(**args)
     pre_df: List[Dict[str, str]] = []
     for row in response["DimensionValues"]:
