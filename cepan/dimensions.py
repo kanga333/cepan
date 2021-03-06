@@ -47,14 +47,14 @@ def get_dimensions() -> pd.DataFrame:
 
 def get_dimension_values(
     dimension: str,
-    start: datetime.date,
-    end: datetime.date = datetime.date.today(),
+    start: datetime.datetime,
+    end: datetime.datetime = datetime.datetime.now(),
     search_string: Optional[str] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)
     args: Dict[str, Any] = {
-        "TimePeriod": {"Start": start.isoformat(), "End": end.isoformat()},
+        "TimePeriod": _utils.build_date_period(start, end),
         "Dimension": dimension,
     }
     response: Dict[str, Any] = client.get_dimension_values(**args)

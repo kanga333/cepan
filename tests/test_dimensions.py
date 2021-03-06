@@ -12,7 +12,7 @@ def test_get_dimensions(mocker):
         ],
     }
     mocker.patch("boto3.client", return_value=client_mock)
-    start = datetime.date(2020, 1, 1)
+    start = datetime.datetime(2020, 1, 1)
     df = cepan.get_dimension_values("AZ", start)
     assert len(df.index) == 1
     assert len(df.columns) == 2
