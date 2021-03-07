@@ -1,33 +1,54 @@
 import datetime
 
+import pytest
+
 import cepan
 
+# Tuples corresponding to
+# mock response, expected number of lines and expected number of rows.
+testdata = [
+    (
+        {
+            "GroupDefinitions": [],
+            "ResultsByTime": [
+                {
+                    "TimePeriod": {"Start": "2021-01-01", "End": "2021-02-01"},
+                    "Total": {
+                        "AmortizedCost": {"Amount": "1.0", "Unit": "USD"},
+                        "BlendedCost": {"Amount": "1.1", "Unit": "USD"},
+                    },
+                    "Groups": [],
+                    "Estimated": False,
+                },
+                {
+                    "TimePeriod": {"Start": "2021-02-01", "End": "2021-02-04"},
+                    "Total": {
+                        "AmortizedCost": {"Amount": "2.0", "Unit": "USD"},
+                        "BlendedCost": {"Amount": "2.1", "Unit": "USD"},
+                    },
+                    "Groups": [],
+                    "Estimated": False,
+                },
+            ],
+        },
+        2,
+        3,
+    )
+]
 
-def test_get_cost_and_usage(mocker):
+
+@pytest.mark.parametrize(
+    "mock_response,expected_lines,expected_rows",
+    testdata,
+)
+def test_get_cost_and_usage(
+    mocker,
+    mock_response,
+    expected_lines,
+    expected_rows,
+):
     client_mock = mocker.Mock()
-    client_mock.get_cost_and_usage.return_value = {
-        "GroupDefinitions": [],
-        "ResultsByTime": [
-            {
-                "TimePeriod": {"Start": "2021-01-01", "End": "2021-02-01"},
-                "Total": {
-                    "AmortizedCost": {"Amount": "1.0", "Unit": "USD"},
-                    "BlendedCost": {"Amount": "1.1", "Unit": "USD"},
-                },
-                "Groups": [],
-                "Estimated": False,
-            },
-            {
-                "TimePeriod": {"Start": "2021-02-01", "End": "2021-02-04"},
-                "Total": {
-                    "AmortizedCost": {"Amount": "2.0", "Unit": "USD"},
-                    "BlendedCost": {"Amount": "2.1", "Unit": "USD"},
-                },
-                "Groups": [],
-                "Estimated": False,
-            },
-        ],
-    }
+    client_mock.get_cost_and_usage.return_value = mock_response
     mocker.patch("boto3.client", return_value=client_mock)
     start = datetime.datetime(2020, 1, 1)
     df = cepan.get_cost_and_usage(
@@ -35,5 +56,5 @@ def test_get_cost_and_usage(mocker):
         ["AmortizedCost", "BlendedCost"],
         start,
     )
-    assert len(df.index) == 2
-    assert len(df.columns) == 3
+    assert len(df.index) == expected_lines
+    assert len(df.columns) == expected_rows
