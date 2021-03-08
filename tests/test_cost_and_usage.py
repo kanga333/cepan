@@ -33,7 +33,85 @@ testdata = [
         },
         2,
         3,
-    )
+    ),
+    (
+        {
+            "GroupDefinitions": [
+                {"Type": "DIMENSION", "Key": "REGION"},
+                {"Type": "DIMENSION", "Key": "AZ"},
+            ],
+            "ResultsByTime": [
+                {
+                    "TimePeriod": {"Start": "2021-01-01", "End": "2021-01-02"},
+                    "Total": {},
+                    "Groups": [
+                        {
+                            "Keys": ["NoRegion", "NoAZ"],
+                            "Metrics": {
+                                "AmortizedCost": {
+                                    "Amount": "0.001",
+                                    "Unit": "USD",
+                                },
+                                "BlendedCost": {
+                                    "Amount": "0.002",
+                                    "Unit": "USD",
+                                },
+                            },
+                        },
+                        {
+                            "Keys": ["ap-northeast-1", "NoAZ"],
+                            "Metrics": {
+                                "AmortizedCost": {
+                                    "Amount": "0.003",
+                                    "Unit": "USD",
+                                },
+                                "BlendedCost": {
+                                    "Amount": "0.004",
+                                    "Unit": "USD",
+                                },
+                            },
+                        },
+                    ],
+                    "Estimated": False,
+                },
+                {
+                    "TimePeriod": {"Start": "2021-01-02", "End": "2021-01-03"},
+                    "Total": {},
+                    "Groups": [
+                        {
+                            "Keys": ["NoRegion", "NoAZ"],
+                            "Metrics": {
+                                "AmortizedCost": {
+                                    "Amount": "0.005",
+                                    "Unit": "USD",
+                                },
+                                "BlendedCost": {
+                                    "Amount": "0.006",
+                                    "Unit": "USD",
+                                },
+                            },
+                        },
+                        {
+                            "Keys": ["ap-northeast-1", "NoAZ"],
+                            "Metrics": {
+                                "AmortizedCost": {
+                                    "Amount": "0.007",
+                                    "Unit": "USD",
+                                },
+                                "BlendedCost": {
+                                    "Amount": "0.008",
+                                    "Unit": "USD",
+                                },
+                            },
+                        },
+                    ],
+                    "Estimated": False,
+                },
+            ],
+        },
+        4,
+        5,
+    ),
 ]
 
 
