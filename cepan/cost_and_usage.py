@@ -34,11 +34,9 @@ def get_cost_and_usage(
     for row in response["ResultsByTime"]:
         time: str = row["TimePeriod"]["Start"]
         if row["Total"]:
-            pre_row = _build_total_record(time, row)
-            pre_df.append(pre_row)
+            pre_df.append(_process_total_row(time, row["Total"]))
         for group in row["Groups"]:
-            pre_row = _build_group_record(time, group, group_definitions)
-            pre_df.append(pre_row)
+            pre_df.append(_process_group_row(time, group, group_definitions))
     return pd.DataFrame(pre_df, dtype="string")
 
 
@@ -52,19 +50,19 @@ def _build_group_by(
     return group_by
 
 
-def _build_total_record(time: str, row: Dict[str, Any]) -> Dict[str, str]:
-    pre_row: Dict[str, str] = {"Time": time}
-    for key, val in row["Total"].items():
-        pre_row[key] = val["Amount"]
-    return pre_row
+def _process_total_row(time: str, total_row: Dict[str, Any]) -> Dict[str, str]:
+    processed: Dict[str, str] = {"Time": time}
+    for key, val in total_row.items():
+        processed[key] = val["Amount"]
+    return processed
 
 
-def _build_group_record(
-    time: str, group: Dict[str, Any], group_definitions: List[str]
+def _process_group_row(
+    time: str, group_row: Dict[str, Any], group_definitions: List[str]
 ) -> Dict[str, str]:
-    pre_row: Dict[str, str] = {"Time": time}
-    for definition, val in zip(group_definitions, group["Keys"]):
-        pre_row[definition] = val
-    for key, val in group["Metrics"].items():
-        pre_row[key] = val["Amount"]
-    return pre_row
+    processed: Dict[str, str] = {"Time": time}
+    for definition, val in zip(group_definitions, group_row["Keys"]):
+        processed[definition] = val
+    for key, val in group_row["Metrics"].items():
+        processed[key] = val["Amount"]
+    return processed
