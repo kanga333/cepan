@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, Optional
+from typing import Any, Callable, Dict, Iterator, Optional
 
 import boto3
 
@@ -24,3 +24,17 @@ def build_date_period(
         "Start": start.strftime(_date_format),
         "End": end.strftime(_date_format),
     }
+
+
+def call_with_pagination(
+    client: boto3.client,
+    func_name: str,
+    args: Dict[str, Any],
+) -> Iterator[Dict[str, Any]]:
+    func: Callable[..., Dict[str, Any]] = getattr(client, func_name)
+    response: Dict[str, Any] = func(**args)
+    yield response
+    while "NextToken" in response:
+        args["NextToken"] = response["NextToken"]
+        response = func(**args)
+        yield response
