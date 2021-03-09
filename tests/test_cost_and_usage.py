@@ -12,7 +12,7 @@ testdata = [
             "GroupDefinitions": [],
             "ResultsByTime": [
                 {
-                    "TimePeriod": {"Start": "2021-01-01", "End": "2021-02-01"},
+                    "TimePeriod": {"Start": "2020-01-01", "End": "2020-01-02"},
                     "Total": {
                         "AmortizedCost": {"Amount": "1.0", "Unit": "USD"},
                         "BlendedCost": {"Amount": "1.1", "Unit": "USD"},
@@ -21,7 +21,7 @@ testdata = [
                     "Estimated": False,
                 },
                 {
-                    "TimePeriod": {"Start": "2021-02-01", "End": "2021-02-04"},
+                    "TimePeriod": {"Start": "2020-01-02", "End": "2020-01-03"},
                     "Total": {
                         "AmortizedCost": {"Amount": "2.0", "Unit": "USD"},
                         "BlendedCost": {"Amount": "2.1", "Unit": "USD"},
@@ -42,7 +42,7 @@ testdata = [
             ],
             "ResultsByTime": [
                 {
-                    "TimePeriod": {"Start": "2021-01-01", "End": "2021-01-02"},
+                    "TimePeriod": {"Start": "2020-01-01", "End": "2020-01-02"},
                     "Total": {},
                     "Groups": [
                         {
@@ -75,7 +75,7 @@ testdata = [
                     "Estimated": False,
                 },
                 {
-                    "TimePeriod": {"Start": "2021-01-02", "End": "2021-01-03"},
+                    "TimePeriod": {"Start": "2020-01-02", "End": "2020-01-03"},
                     "Total": {},
                     "Groups": [
                         {
@@ -129,10 +129,12 @@ def test_get_cost_and_usage(
     client_mock.get_cost_and_usage.return_value = mock_response
     mocker.patch("boto3.client", return_value=client_mock)
     start = datetime.datetime(2020, 1, 1)
+    end = datetime.datetime(2020, 1, 3)
     df = cepan.get_cost_and_usage(
-        "MONTHLY",
+        "DAILY",
         ["AmortizedCost", "BlendedCost"],
         start,
+        end,
     )
     assert len(df.index) == expected_lines
     assert len(df.columns) == expected_rows
