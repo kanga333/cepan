@@ -4,8 +4,7 @@ import pytest
 
 import cepan
 
-# Tuples corresponding to
-# mock response, expected number of lines and expected number of rows.
+# Tuples corresponding to mock response, expected shape of data frame.
 testdata = [
     (
         {
@@ -31,8 +30,7 @@ testdata = [
                 },
             ],
         },
-        2,
-        3,
+        (2, 3),
     ),
     (
         {
@@ -109,22 +107,16 @@ testdata = [
                 },
             ],
         },
-        4,
-        5,
+        (4, 5),
     ),
 ]
 
 
 @pytest.mark.parametrize(
-    "mock_response,expected_lines,expected_rows",
+    "mock_response,expected_shape",
     testdata,
 )
-def test_get_cost_and_usage(
-    mocker,
-    mock_response,
-    expected_lines,
-    expected_rows,
-):
+def test_get_cost_and_usage(mocker, mock_response, expected_shape):
     client_mock = mocker.Mock()
     client_mock.get_cost_and_usage.return_value = mock_response
     mocker.patch("boto3.client", return_value=client_mock)
@@ -136,5 +128,4 @@ def test_get_cost_and_usage(
         start,
         end,
     )
-    assert len(df.index) == expected_lines
-    assert len(df.columns) == expected_rows
+    assert df.shape == expected_shape
