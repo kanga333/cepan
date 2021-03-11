@@ -34,7 +34,12 @@ def call_with_pagination(
     func: Callable[..., Dict[str, Any]] = getattr(client, func_name)
     response: Dict[str, Any] = func(**args)
     yield response
-    while "NextToken" in response:
-        args["NextToken"] = response["NextToken"]
+    token_key: Optional[str] = None
+    if "NextToken" in response:
+        token_key = "NextToken"
+    if "NextPageToken" in response:
+        token_key = "NextPageToken"
+    while token_key in response:
+        args[token_key] = response[token_key]
         response = func(**args)
         yield response

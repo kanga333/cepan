@@ -1,5 +1,7 @@
 import datetime
 
+import pytest
+
 from cepan._utils import build_date_period, call_with_pagination
 
 
@@ -12,10 +14,14 @@ def test_build_date_period():
     }
 
 
-def test_call_with_pagination(mocker):
+@pytest.mark.parametrize(
+    "pagenation_token",
+    ["NextToken", "NextPageToken"],
+)
+def test_call_with_pagination(mocker, pagenation_token):
     responses = [
-        {"Result": "First", "NextToken": "Second"},
-        {"Result": "Second", "NextToken": "Third"},
+        {"Result": "First", pagenation_token: "Second"},
+        {"Result": "Second", pagenation_token: "Third"},
         {"Result": "Third"},
     ]
     client_mock = mocker.Mock()
@@ -28,6 +34,6 @@ def test_call_with_pagination(mocker):
     keywords_list = [keywords for _, keywords in call_list]
     assert keywords_list == [
         {"arg1": "foo", "arg2": "bar"},
-        {"arg1": "foo", "arg2": "bar", "NextToken": "Second"},
-        {"arg1": "foo", "arg2": "bar", "NextToken": "Third"},
+        {"arg1": "foo", "arg2": "bar", pagenation_token: "Second"},
+        {"arg1": "foo", "arg2": "bar", pagenation_token: "Third"},
     ]
