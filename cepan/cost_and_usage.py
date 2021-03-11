@@ -26,17 +26,25 @@ def get_cost_and_usage(
         "Metrics": metrics,
         "GroupBy": _build_group_by(group_by_dimensions),
     }
-    response: Dict[str, Any] = client.get_cost_and_usage(**args)
+    response_iterator = _utils.call_with_pagination(
+        client,
+        "get_cost_and_usage",
+        args,
+    )
+
     pre_df: List[Dict[str, str]] = []
-    group_definitions: List[str] = []
-    for definition in response["GroupDefinitions"]:
-        group_definitions.append(definition["Key"])
-    for row in response["ResultsByTime"]:
-        time: str = row["TimePeriod"]["Start"]
-        if row["Total"]:
-            pre_df.append(_process_total_row(time, row["Total"]))
-        for group in row["Groups"]:
-            pre_df.append(_process_group_row(time, group, group_definitions))
+    for response in response_iterator:
+        group_definitions: List[str] = []
+        for definition in response["GroupDefinitions"]:
+            group_definitions.append(definition["Key"])
+        for row in response["ResultsByTime"]:
+            time: str = row["TimePeriod"]["Start"]
+            if row["Total"]:
+                processed = _process_total_row(time, row["Total"])
+                pre_df.append(processed)
+            for group in row["Groups"]:
+                processed = _process_group_row(time, group, group_definitions)
+                pre_df.append(processed)
     return pd.DataFrame(pre_df, dtype="string")
 
 
