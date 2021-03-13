@@ -4,6 +4,46 @@ import pytest
 
 import cepan
 
+
+@pytest.mark.parametrize(
+    "func_args,expected_client_args",
+    [
+        (
+            {
+                "granularity": "DAILY",
+                "metrics": ["AmortizedCost"],
+                "start": datetime.datetime(2020, 1, 1),
+                "end": datetime.datetime(2020, 1, 2),
+                "group_by_dimensions": ["AZ", "REGION"],
+            },
+            {
+                "TimePeriod": {
+                    "Start": "2020-01-01",
+                    "End": "2020-01-02",
+                },
+                "Granularity": "DAILY",
+                "Metrics": ["AmortizedCost"],
+                "GroupBy": [
+                    {"Type": "DIMENSION", "Key": "AZ"},
+                    {"Type": "DIMENSION", "Key": "REGION"},
+                ],
+            },
+        )
+    ],
+)
+def test_get_cost_and_usage_args(mocker, func_args, expected_client_args):
+    # Test that the response from the boto3.client can be converted to a Dataframe.
+    client_mock = mocker.Mock()
+    client_mock.get_cost_and_usage.return_value = {
+        "GroupDefinitions": [],
+        "ResultsByTime": [],
+    }
+    mocker.patch("boto3.client", return_value=client_mock)
+    cepan.get_cost_and_usage(**func_args)
+    kwargs = client_mock.get_cost_and_usage.call_args.kwargs
+    assert kwargs == expected_client_args
+
+
 # Tuples corresponding to mock responses, expected shape of data frame.
 return_value_testdata = [
     # Normal Response
