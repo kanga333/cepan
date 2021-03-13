@@ -1,13 +1,14 @@
 import pytest
+
 from cepan.filter import (
     And,
-    _BaseFilter,
-    _CompositeFilter,
     CostCategories,
     Dimensions,
     Not,
     Or,
     Tags,
+    _BaseFilter,
+    _CompositeFilter,
 )
 
 
