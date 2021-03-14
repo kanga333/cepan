@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import boto3
 import pandas as pd
 
-from cepan import _utils, exceptions
+from cepan import _utils, exceptions, filter
 
 
 def get_cost_and_usage(
@@ -12,6 +12,7 @@ def get_cost_and_usage(
     metrics: List[str],
     start: datetime.datetime,
     end: datetime.datetime = datetime.datetime.now(),
+    filter: filter.Filter = None,
     group_by_dimensions: Optional[List[str]] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
@@ -26,6 +27,8 @@ def get_cost_and_usage(
         "Metrics": metrics,
         "GroupBy": _build_group_by(group_by_dimensions),
     }
+    if filter:
+        args["Filter"] = filter.build_expression()
     response_iterator = _utils.call_with_pagination(
         client,
         "get_cost_and_usage",

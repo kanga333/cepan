@@ -3,6 +3,7 @@ import datetime
 import pytest
 
 import cepan
+from cepan.filter import Dimensions
 
 
 @pytest.mark.parametrize(
@@ -14,6 +15,7 @@ import cepan
                 "metrics": ["AmortizedCost"],
                 "start": datetime.datetime(2020, 1, 1),
                 "end": datetime.datetime(2020, 1, 2),
+                "filter": Dimensions("REGION", ["ap-northeast-1"]),
                 "group_by_dimensions": ["AZ", "REGION"],
             },
             {
@@ -22,6 +24,12 @@ import cepan
                     "End": "2020-01-02",
                 },
                 "Granularity": "DAILY",
+                "Filter": {
+                    "Dimensions": {
+                        "Key": "REGION",
+                        "Values": ["ap-northeast-1"],
+                    },
+                },
                 "Metrics": ["AmortizedCost"],
                 "GroupBy": [
                     {"Type": "DIMENSION", "Key": "AZ"},
