@@ -44,7 +44,6 @@ def test_get_cost_and_usage_args(mocker, func_args, expected_client_args):
     # Test that the response from the boto3.client can be converted to a Dataframe.
     client_mock = mocker.Mock()
     client_mock.get_cost_and_usage.return_value = {
-        "GroupDefinitions": [],
         "ResultsByTime": [],
     }
     mocker.patch("boto3.client", return_value=client_mock)
@@ -59,7 +58,6 @@ return_value_testdata = [
     (
         [
             {
-                "GroupDefinitions": [],
                 "ResultsByTime": [
                     {
                         "TimePeriod": {"Start": "2020-01-01", "End": "2020-01-02"},
@@ -169,7 +167,6 @@ return_value_testdata = [
         [
             {
                 "NextPageToken": "Next",
-                "GroupDefinitions": [],
                 "ResultsByTime": [
                     {
                         "TimePeriod": {"Start": "2020-01-01", "End": "2020-01-02"},
@@ -182,7 +179,6 @@ return_value_testdata = [
                 ],
             },
             {
-                "GroupDefinitions": [],
                 "ResultsByTime": [
                     {
                         "TimePeriod": {"Start": "2020-01-02", "End": "2020-01-03"},
