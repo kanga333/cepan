@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 import boto3
 import pandas as pd
 
-from cepan import _utils, exceptions, filter
+from cepan import _utils, exceptions, filter, group_by
 
 
 def get_cost_and_usage(
@@ -13,7 +13,7 @@ def get_cost_and_usage(
     start: datetime.datetime,
     end: datetime.datetime = datetime.datetime.now(),
     filter: filter.Filter = None,
-    group_by_dimensions: Optional[List[str]] = None,
+    group_by: Optional[group_by.GroupBy] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)
@@ -25,10 +25,11 @@ def get_cost_and_usage(
         "TimePeriod": _utils.build_date_period(start, end),
         "Granularity": granularity,
         "Metrics": metrics,
-        "GroupBy": _build_group_by(group_by_dimensions),
     }
     if filter:
         args["Filter"] = filter.build_expression()
+    if group_by:
+        args["GroupBy"] = group_by.build()
     response_iterator = _utils.call_with_pagination(
         client,
         "get_cost_and_usage",
@@ -49,16 +50,6 @@ def get_cost_and_usage(
                 processed = _process_group_row(time, group, group_definitions)
                 pre_df.append(processed)
     return pd.DataFrame(pre_df, dtype="string")
-
-
-def _build_group_by(
-    group_by_dimensions: Optional[List[str]],
-) -> List[Dict[str, str]]:
-    group_by: List[Dict[str, str]] = []
-    if group_by_dimensions:
-        for val in group_by_dimensions:
-            group_by.append({"Type": "DIMENSION", "Key": val})
-    return group_by
 
 
 def _process_total_row(time: str, total_row: Dict[str, Any]) -> Dict[str, str]:

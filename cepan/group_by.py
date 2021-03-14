@@ -1,0 +1,22 @@
+from dataclasses import dataclass
+from typing import Dict, List, Optional
+
+
+@dataclass
+class GroupBy:
+    dimensions: Optional[List[str]] = None
+    tags: Optional[List[str]] = None
+    cost_categories: Optional[List[str]] = None
+
+    def build(self) -> List[Dict[str, str]]:
+        group_by: List[Dict[str, str]] = []
+        if self.dimensions:
+            for dimension in self.dimensions:
+                group_by.append({"Type": "DIMENSION", "Key": dimension})
+        if self.tags:
+            for tag in self.tags:
+                group_by.append({"Type": "TAG", "Key": tag})
+        if self.cost_categories:
+            for cost_category in self.cost_categories:
+                group_by.append({"Type": "COST_CATEGORY", "Key": cost_category})
+        return group_by

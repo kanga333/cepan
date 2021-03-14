@@ -4,6 +4,7 @@ import pytest
 
 import cepan
 from cepan.filter import Dimensions
+from cepan.group_by import GroupBy
 
 
 @pytest.mark.parametrize(
@@ -16,7 +17,7 @@ from cepan.filter import Dimensions
                 "start": datetime.datetime(2020, 1, 1),
                 "end": datetime.datetime(2020, 1, 2),
                 "filter": Dimensions("REGION", ["ap-northeast-1"]),
-                "group_by_dimensions": ["AZ", "REGION"],
+                "group_by": GroupBy(["AZ", "REGION"]),
             },
             {
                 "TimePeriod": {
