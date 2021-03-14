@@ -1,17 +1,15 @@
-import datetime
 from typing import Any, Dict, List, Optional
 
 import boto3
 import pandas as pd
 
-from cepan import _utils, exceptions, filter, group_by
+from cepan import _utils, exceptions, filter, group_by, time_period
 
 
 def get_cost_and_usage(
     granularity: str,
     metrics: List[str],
-    start: datetime.datetime,
-    end: datetime.datetime = datetime.datetime.now(),
+    time_period: time_period.TimePeriod,
     filter: filter.Filter = None,
     group_by: Optional[group_by.GroupBy] = None,
     session: Optional[boto3.Session] = None,
@@ -22,7 +20,7 @@ def get_cost_and_usage(
             "Hourly granularity is not yet supported"
         )
     args: Dict[str, Any] = {
-        "TimePeriod": _utils.build_date_period(start, end),
+        "TimePeriod": time_period.build(),
         "Granularity": granularity,
         "Metrics": metrics,
     }

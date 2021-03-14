@@ -1,4 +1,3 @@
-import datetime
 from typing import Any, Callable, Dict, Iterator, Optional
 
 import boto3
@@ -14,16 +13,6 @@ def client(
         return boto3.client(service)
 
     return session.client(service)
-
-
-def build_date_period(
-    start: datetime.datetime,
-    end: datetime.datetime,
-) -> Dict[str, str]:
-    return {
-        "Start": start.strftime(_date_format),
-        "End": end.strftime(_date_format),
-    }
 
 
 def call_with_pagination(

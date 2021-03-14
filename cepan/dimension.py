@@ -1,10 +1,9 @@
-import datetime
 from typing import Any, Dict, List, Optional
 
 import boto3
 import pandas as pd
 
-from cepan import _utils
+from cepan import _utils, time_period
 
 _DIMENSIONS = [
     "AZ",
@@ -47,14 +46,13 @@ def get_dimensions() -> pd.DataFrame:
 
 def get_dimension_values(
     dimension: str,
-    start: datetime.datetime,
-    end: datetime.datetime = datetime.datetime.now(),
+    time_period: time_period.TimePeriod,
     search_string: Optional[str] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)
     args: Dict[str, Any] = {
-        "TimePeriod": _utils.build_date_period(start, end),
+        "TimePeriod": time_period.build(),
         "Dimension": dimension,
     }
     response: Dict[str, Any] = client.get_dimension_values(**args)

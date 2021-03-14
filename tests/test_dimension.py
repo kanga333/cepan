@@ -1,6 +1,7 @@
 import datetime
 
 import cepan
+from cepan.time_period import TimePeriod
 
 
 def test_get_dimensions(mocker):
@@ -12,7 +13,9 @@ def test_get_dimensions(mocker):
         ],
     }
     mocker.patch("boto3.client", return_value=client_mock)
-    start = datetime.datetime(2020, 1, 1)
-    df = cepan.get_dimension_values("AZ", start)
+    df = cepan.get_dimension_values(
+        "AZ",
+        TimePeriod(start=datetime.datetime(2020, 1, 1)),
+    )
     assert len(df.index) == 1
     assert len(df.columns) == 2
