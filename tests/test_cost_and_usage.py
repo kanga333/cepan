@@ -13,11 +13,11 @@ from cepan.time_period import TimePeriod
     [
         (
             {
-                "granularity": "DAILY",
-                "metrics": ["AmortizedCost"],
                 "time_period": TimePeriod(
                     datetime.datetime(2020, 1, 1), datetime.datetime(2020, 1, 2)
                 ),
+                "granularity": "DAILY",
+                "metrics": ["AmortizedCost"],
                 "filter": Dimensions("REGION", ["ap-northeast-1"]),
                 "group_by": GroupBy(["AZ", "REGION"]),
             },
@@ -207,5 +207,5 @@ def test_get_cost_and_usage_return_value(mocker, mock_response, expected_shape):
     client_mock = mocker.Mock()
     client_mock.get_cost_and_usage.side_effect = mock_response
     mocker.patch("boto3.client", return_value=client_mock)
-    df = cepan.get_cost_and_usage("", [], TimePeriod(datetime.datetime(2020, 1, 1)))
+    df = cepan.get_cost_and_usage(TimePeriod(datetime.datetime(2020, 1, 1)), "")
     assert df.shape == expected_shape

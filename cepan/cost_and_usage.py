@@ -7,10 +7,10 @@ from cepan import _utils, exceptions, filter, group_by, time_period
 
 
 def get_cost_and_usage(
-    granularity: str,
-    metrics: List[str],
     time_period: time_period.TimePeriod,
+    granularity: str,
     filter: filter.Filter = None,
+    metrics: List[str] = ["UnblendedCost"],
     group_by: Optional[group_by.GroupBy] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
