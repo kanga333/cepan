@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 
 @dataclass
@@ -20,3 +20,11 @@ class GroupBy:
             for cost_category in self.cost_categories:
                 group_by.append({"Type": "COST_CATEGORY", "Key": cost_category})
         return group_by
+
+
+def _build_group_by(
+    _group_by: Union[GroupBy, List[Dict[str, str]]]
+) -> List[Dict[str, str]]:
+    if isinstance(_group_by, List):
+        return _group_by
+    return _group_by.build()

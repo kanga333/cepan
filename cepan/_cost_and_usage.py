@@ -1,17 +1,20 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import boto3
 import pandas as pd
 
-from cepan import _filter, _group_by, _time_period, _utils, exceptions
+from cepan import _utils, exceptions
+from cepan._filter import Filter, _build_filter
+from cepan._group_by import GroupBy, _build_group_by
+from cepan._time_period import TimePeriod, _build_time_period
 
 
 def get_cost_and_usage(
-    time_period: _time_period.TimePeriod,
+    time_period: Union[TimePeriod, Dict[str, str]],
     granularity: str,
-    filter: _filter.Filter = None,
+    filter: Union[Filter, Dict[str, Any], None] = None,
     metrics: List[str] = ["UnblendedCost"],
-    group_by: Optional[_group_by.GroupBy] = None,
+    group_by: Union[GroupBy, List[Dict[str, str]], None] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)
@@ -20,14 +23,14 @@ def get_cost_and_usage(
             "Hourly granularity is not yet supported"
         )
     args: Dict[str, Any] = {
-        "TimePeriod": time_period.build(),
+        "TimePeriod": _build_time_period(time_period),
         "Granularity": granularity,
         "Metrics": metrics,
     }
     if filter:
-        args["Filter"] = filter.build_expression()
+        args["Filter"] = _build_filter(filter)
     if group_by:
-        args["GroupBy"] = group_by.build()
+        args["GroupBy"] = _build_group_by(group_by)
     response_iterator = _utils.call_with_pagination(
         client,
         "get_cost_and_usage",

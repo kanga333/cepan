@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Protocol
+from typing import Any, Dict, List, Optional, Protocol, Union
 
 
 class Filter(Protocol):
@@ -59,3 +59,9 @@ class Not:
 
     def build_expression(self) -> Dict[str, Any]:
         return {"Not": self.filter.build_expression()}
+
+
+def _build_filter(filter: Union[Filter, Dict[str, Any]]) -> Dict[str, Any]:
+    if isinstance(filter, Dict):
+        return filter
+    return filter.build_expression()

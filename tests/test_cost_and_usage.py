@@ -11,6 +11,7 @@ from cepan._time_period import TimePeriod
 @pytest.mark.parametrize(
     "func_args,expected_client_args",
     [
+        # Request by Class
         (
             {
                 "time_period": TimePeriod(
@@ -39,7 +40,46 @@ from cepan._time_period import TimePeriod
                     {"Type": "DIMENSION", "Key": "REGION"},
                 ],
             },
-        )
+        ),
+        # # Request by Dict
+        (
+            {
+                "time_period": {
+                    "Start": "2020-01-01",
+                    "End": "2020-01-02",
+                },
+                "granularity": "DAILY",
+                "filter": {
+                    "Dimensions": {
+                        "Key": "REGION",
+                        "Values": ["ap-northeast-1"],
+                    },
+                },
+                "metrics": ["AmortizedCost"],
+                "group_by": [
+                    {"Type": "DIMENSION", "Key": "AZ"},
+                    {"Type": "DIMENSION", "Key": "REGION"},
+                ],
+            },
+            {
+                "TimePeriod": {
+                    "Start": "2020-01-01",
+                    "End": "2020-01-02",
+                },
+                "Granularity": "DAILY",
+                "Filter": {
+                    "Dimensions": {
+                        "Key": "REGION",
+                        "Values": ["ap-northeast-1"],
+                    },
+                },
+                "Metrics": ["AmortizedCost"],
+                "GroupBy": [
+                    {"Type": "DIMENSION", "Key": "AZ"},
+                    {"Type": "DIMENSION", "Key": "REGION"},
+                ],
+            },
+        ),
     ],
 )
 def test_get_cost_and_usage_args(mocker, func_args, expected_client_args):
