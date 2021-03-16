@@ -1,6 +1,6 @@
 import datetime
 
-import cepan
+import cepan as ce
 from cepan._time_period import TimePeriod
 
 
@@ -13,7 +13,7 @@ def test_get_dimensions(mocker):
         ],
     }
     mocker.patch("boto3.client", return_value=client_mock)
-    df = cepan.get_dimension_values(
+    df = ce.get_dimension_values(
         "AZ",
         TimePeriod(start=datetime.datetime(2020, 1, 1)),
     )

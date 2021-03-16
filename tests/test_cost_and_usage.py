@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-import cepan
+import cepan as ce
 from cepan._filter import Dimensions
 from cepan._group_by import GroupBy
 from cepan._time_period import TimePeriod
@@ -89,7 +89,7 @@ def test_get_cost_and_usage_args(mocker, func_args, expected_client_args):
         "ResultsByTime": [],
     }
     mocker.patch("boto3.client", return_value=client_mock)
-    cepan.get_cost_and_usage(**func_args)
+    ce.get_cost_and_usage(**func_args)
     kwargs = client_mock.get_cost_and_usage.call_args.kwargs
     assert kwargs == expected_client_args
 
@@ -247,5 +247,5 @@ def test_get_cost_and_usage_return_value(mocker, mock_response, expected_shape):
     client_mock = mocker.Mock()
     client_mock.get_cost_and_usage.side_effect = mock_response
     mocker.patch("boto3.client", return_value=client_mock)
-    df = cepan.get_cost_and_usage(TimePeriod(datetime.datetime(2020, 1, 1)), "")
+    df = ce.get_cost_and_usage(TimePeriod(datetime.datetime(2020, 1, 1)), "")
     assert df.shape == expected_shape
