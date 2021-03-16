@@ -2,8 +2,6 @@ from typing import Any, Callable, Dict, Iterator, Optional
 
 import boto3
 
-_date_format = "%Y-%m-%d"
-
 
 def client(
     service: str,
