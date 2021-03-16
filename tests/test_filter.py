@@ -1,6 +1,6 @@
 import pytest
 
-from cepan.filter import (
+from cepan._filter import (
     And,
     CostCategories,
     Dimensions,

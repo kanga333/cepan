@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from cepan.time_period import TimePeriod
+from cepan._time_period import TimePeriod
 
 
 @pytest.mark.parametrize(

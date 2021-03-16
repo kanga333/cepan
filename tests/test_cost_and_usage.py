@@ -3,9 +3,9 @@ import datetime
 import pytest
 
 import cepan
-from cepan.filter import Dimensions
-from cepan.group_by import GroupBy
-from cepan.time_period import TimePeriod
+from cepan._filter import Dimensions
+from cepan._group_by import GroupBy
+from cepan._time_period import TimePeriod
 
 
 @pytest.mark.parametrize(

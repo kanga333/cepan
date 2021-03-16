@@ -1,6 +1,6 @@
 import pytest
 
-from cepan.group_by import GroupBy
+from cepan._group_by import GroupBy
 
 
 @pytest.mark.parametrize(

@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 import boto3
 import pandas as pd
 
-from cepan import _utils, time_period
+from cepan import _time_period, _utils
 
 _DIMENSIONS = [
     "AZ",
@@ -46,7 +46,7 @@ def get_dimensions() -> pd.DataFrame:
 
 def get_dimension_values(
     dimension: str,
-    time_period: time_period.TimePeriod,
+    time_period: _time_period.TimePeriod,
     search_string: Optional[str] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:

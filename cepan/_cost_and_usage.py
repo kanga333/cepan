@@ -3,15 +3,15 @@ from typing import Any, Dict, List, Optional
 import boto3
 import pandas as pd
 
-from cepan import _utils, exceptions, filter, group_by, time_period
+from cepan import _filter, _group_by, _time_period, _utils, exceptions
 
 
 def get_cost_and_usage(
-    time_period: time_period.TimePeriod,
+    time_period: _time_period.TimePeriod,
     granularity: str,
-    filter: filter.Filter = None,
+    filter: _filter.Filter = None,
     metrics: List[str] = ["UnblendedCost"],
-    group_by: Optional[group_by.GroupBy] = None,
+    group_by: Optional[_group_by.GroupBy] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)

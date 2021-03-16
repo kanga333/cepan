@@ -1,7 +1,7 @@
 import datetime
 
 import cepan
-from cepan.time_period import TimePeriod
+from cepan._time_period import TimePeriod
 
 
 def test_get_dimensions(mocker):
