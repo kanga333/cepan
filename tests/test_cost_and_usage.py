@@ -249,3 +249,29 @@ def test_get_cost_and_usage_return_value(mocker, mock_response, expected_shape):
     mocker.patch("boto3.client", return_value=client_mock)
     df = ce.get_cost_and_usage(TimePeriod(datetime.datetime(2020, 1, 1)), "")
     assert df.shape == expected_shape
+
+
+@pytest.mark.parametrize(
+    "dtype",
+    ["float64", "string"],
+)
+def test_get_cost_and_usage_dtype(mocker, dtype):
+    # Test that the dtype of the metrics column is set correctly.
+    client_mock = mocker.Mock()
+    client_mock.get_cost_and_usage.return_value = {
+        "ResultsByTime": [
+            {
+                "TimePeriod": {"Start": "2020-01-01", "End": "2020-01-02"},
+                "Total": {
+                    "AmortizedCost": {"Amount": "1.0", "Unit": "USD"},
+                },
+                "Groups": [],
+                "Estimated": False,
+            }
+        ],
+    }
+    mocker.patch("boto3.client", return_value=client_mock)
+    df = ce.get_cost_and_usage(
+        TimePeriod(datetime.datetime(2020, 1, 1)), "", metrics_dtype=dtype
+    )
+    assert df["AmortizedCost"].dtype == dtype
