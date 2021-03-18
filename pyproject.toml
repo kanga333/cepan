@@ -6,7 +6,7 @@ authors = ["kanga333 <e411z7t40w@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 pandas = "^1.2.3"
 boto3 = "^1.17.19"
 
