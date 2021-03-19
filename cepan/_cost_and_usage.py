@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional, Set, Union
 import boto3
 import pandas as pd
 
-from cepan import _utils, exceptions
+from cepan import _utils
 from cepan._filter import Filter, _build_filter
 from cepan._group_by import GroupBy, _build_group_by
 from cepan._time_period import TimePeriod, _build_time_period
@@ -19,12 +19,8 @@ def get_cost_and_usage(
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)
-    if granularity == "HOURLY":
-        raise exceptions.UnsupportedGranularity(
-            "Hourly granularity is not yet supported"
-        )
     args: Dict[str, Any] = {
-        "TimePeriod": _build_time_period(time_period),
+        "TimePeriod": _build_time_period(time_period, granularity == "HOURLY"),
         "Granularity": granularity,
         "Metrics": metrics,
     }
