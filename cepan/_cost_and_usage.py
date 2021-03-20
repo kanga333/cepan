@@ -18,6 +18,57 @@ def get_cost_and_usage(
     metrics_dtype: str = "float64",
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
+    """Get cost and usage report.
+
+    See also:
+    https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ce.html#CostExplorer.Client.get_cost_and_usage
+
+    Parameters
+    ----------
+    time_period : Union[TimePeriod, Dict[str, str]]
+        Sets the start and end dates for retrieving AWS costs.
+        In addition to the TimePeriod type,
+        you can directly use variables of dictionary types that boto3 can use.
+    granularity : str
+        Sets the AWS cost granularity to MONTHLY or DAILY , or HOURLY.
+    filter : Union[Filter, Dict[str, Any]], optional
+        Filters AWS costs by different dimensions.
+        In addition to the Filter type,
+        you can directly use variables of dictionary types that boto3 can use.
+    metrics : List[str], optional
+        Which metrics are returned in the query.
+    group_by : Union[GroupBy, List[Dict[str, str]]], optional
+        You can group AWS costs using up to two different groups.
+        In addition to the Filter type,
+        you can directly use variables of dictionary types that boto3 can use.
+    metrics_dtype: str, optional
+        The dtype of metrics. The default is float64.
+        If you want to keep the number of significant digits, specify the string type.
+    boto3_session : boto3.Session(), optional
+        Boto3 Session. The default boto3 session will be used if session receive None.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Result as a Pandas DataFrame.
+
+    Examples
+    --------
+    >>> import cepan as ce
+    >>> from datetime import datetime, timedelta
+    >>> today = datetime.now()
+    >>> yesterdat = today - timedelta(days=1)
+    >>> df = ce.get_cost_and_usage(
+    ...     time_period=ce.TimePeriod(
+    ...         start=datetime(2021, 3, 1),
+    ...         end=datetime(2021, 3, 1),
+    ...     ),
+    ...     granularity="DAILY",
+    ...     filter=ce.Not(ce.Dimensions("SERVICE", ["Amazon Athena"])),
+    ...     metrics=["BLENDED_COST", "USAGE_QUANTITY"],
+    ...     group_by=ce.GroupBy(["SERVICE", "AZ"]),
+    ... )
+    """
     client: boto3.client = _utils.client("ce", session)
     args: Dict[str, Any] = {
         "TimePeriod": _build_time_period(time_period, granularity == "HOURLY"),
