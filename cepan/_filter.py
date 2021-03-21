@@ -21,16 +21,32 @@ class _BaseFilter:
 
 
 class Dimensions(_BaseFilter):
+    """The dimension values used for filtering the costs.
+    You can use get_dimension_values to find specific values.
+    See also:
+    https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_DimensionValues.html
+    """
+
     def build_expression(self) -> Dict[str, Any]:
         return {"Dimensions": self._build_base_expression()}
 
 
 class Tags(_BaseFilter):
+    """The Tag values used for filtering the costs.
+    See also:
+    https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_TagValues.html
+    """
+
     def build_expression(self) -> Dict[str, Any]:
         return {"Tags": self._build_base_expression()}
 
 
 class CostCategories(_BaseFilter):
+    """The Cost Categories values used for filtering the costs.
+    See also:
+    https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_CostCategoryValues.html
+    """
+
     def build_expression(self) -> Dict[str, Any]:
         return {"CostCategories": self._build_base_expression()}
 
@@ -44,17 +60,23 @@ class _CompositeFilter:
 
 
 class And(_CompositeFilter):
+    """"Return results that match both Filter objects."""
+
     def build_expression(self) -> Dict[str, Any]:
         return {"And": self._build_composite_expression()}
 
 
 class Or(_CompositeFilter):
+    """Return results that match either Filter object."""
+
     def build_expression(self) -> Dict[str, Any]:
         return {"Or": self._build_composite_expression()}
 
 
 @dataclass
 class Not:
+    """Return results that don't match a Filter object."""
+
     filter: Filter
 
     def build_expression(self) -> Dict[str, Any]:

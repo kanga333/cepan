@@ -4,6 +4,12 @@ from typing import Dict, List, Optional, Union
 
 @dataclass
 class GroupBy:
+    """Represents a group when you specify a group by criteria or
+    in the response to a query with a specific grouping.
+    See also:
+    https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GroupDefinition.html
+    """
+
     dimensions: Optional[List[str]] = None
     tags: Optional[List[str]] = None
     cost_categories: Optional[List[str]] = None

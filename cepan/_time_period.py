@@ -8,6 +8,11 @@ _time_format = "%Y-%m-%dT%H:%M:%SZ"
 
 @dataclass
 class TimePeriod:
+    """The time period of the request.
+    See also:
+    https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_DateInterval.html
+    """
+
     start: datetime.datetime
     end: datetime.datetime = datetime.datetime.now()
 
