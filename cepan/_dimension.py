@@ -3,45 +3,59 @@ from typing import Any, Dict, List, Optional
 import boto3
 import pandas as pd
 
-from cepan import _time_period, _utils
+from cepan import _time_period, _utils, exceptions
 
-_DIMENSIONS = [
+_COST_AND_USAGE_DIMENSIONS = [
     "AZ",
+    "DATABASE_ENGINE",
     "INSTANCE_TYPE",
+    "LEGAL_ENTITY_NAME",
     "LINKED_ACCOUNT",
-    "LINKED_ACCOUNT_NAME",
+    "OPERATING_SYSTEM",
     "OPERATION",
+    "PLATFORM",
     "PURCHASE_TYPE",
-    "REGION",
     "SERVICE",
-    "SERVICE_CODE",
     "USAGE_TYPE",
     "USAGE_TYPE_GROUP",
+    "REGION",
     "RECORD_TYPE",
-    "OPERATING_SYSTEM",
-    "TENANCY",
-    "SCOPE",
-    "PLATFORM",
-    "SUBSCRIPTION_ID",
-    "LEGAL_ENTITY_NAME",
-    "DEPLOYMENT_OPTION",
-    "DATABASE_ENGINE",
-    "CACHE_ENGINE",
-    "INSTANCE_TYPE_FAMILY",
-    "BILLING_ENTITY",
-    "RESERVATION_ID",
     "RESOURCE_ID",
-    "RIGHTSIZING_TYPE",
+]
+
+_RESERVATIONS_DIMENSIONS = [
+    "AZ",
+    "CACHE_ENGINE",
+    "DEPLOYMENT_OPTION",
+    "INSTANCE_TYPE",
+    "LINKED_ACCOUNT",
+    "PLATFORM",
+    "REGION",
+    "SCOPE",
+    "TAG",
+    "TENANCY",
+]
+
+_SAVINGS_PLANS_DIMENSIONS = [
     "SAVINGS_PLANS_TYPE",
-    "SAVINGS_PLAN_ARN",
     "PAYMENT_OPTION",
-    "AGREEMENT_END_DATE_TIME_AFTER",
-    "AGREEMENT_END_DATE_TIME_BEFORE",
+    "REGION",
+    "INSTANCE_TYPE_FAMILY",
+    "LINKED_ACCOUNT",
+    "SAVINGS_PLAN_ARN",
 ]
 
 
-def get_dimensions() -> pd.DataFrame:
-    return pd.DataFrame(_DIMENSIONS, columns=["dimensions"])
+def show_dimensions(context: str = "COST_AND_USAGE") -> List[str]:
+    if context == "COST_AND_USAGE":
+        return _COST_AND_USAGE_DIMENSIONS
+    if context == "RESERVATIONS":
+        return _RESERVATIONS_DIMENSIONS
+    if context == "SAVINGS_PLANS":
+        return _SAVINGS_PLANS_DIMENSIONS
+    raise exceptions.InvalidParameter(
+        f"{context} is invalid, valid values are COST_AND_USAGE, RESERVATIONS, SAVINGS_PLANS."  # noqa
+    )
 
 
 def get_dimension_values(
