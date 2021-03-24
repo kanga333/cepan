@@ -1,9 +1,11 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import boto3
 import pandas as pd
 
-from cepan import _time_period, _utils, exceptions
+from cepan import _utils, exceptions
+from cepan._filter import Filter, _build_filter
+from cepan._time_period import TimePeriod, _build_time_period
 
 _COST_AND_USAGE_DIMENSIONS = [
     "AZ",
@@ -59,22 +61,36 @@ def show_dimensions(context: str = "COST_AND_USAGE") -> List[str]:
 
 
 def get_dimension_values(
+    time_period: Union[TimePeriod, Dict[str, str]],
     dimension: str,
-    time_period: _time_period.TimePeriod,
     search_string: Optional[str] = None,
+    context: Optional[str] = None,
+    filter: Union[Filter, Dict[str, Any], None] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     client: boto3.client = _utils.client("ce", session)
     args: Dict[str, Any] = {
-        "TimePeriod": time_period.build(),
+        "TimePeriod": _build_time_period(time_period),
         "Dimension": dimension,
     }
-    response: Dict[str, Any] = client.get_dimension_values(**args)
+    if search_string:
+        args["SearchString"] = search_string
+    if context:
+        args["Context"] = context
+    if filter:
+        args["Filter"] = _build_filter(filter)
+    response_iterator = _utils.call_with_pagination(
+        client,
+        "get_dimension_values",
+        args,
+    )
+
     pre_df: List[Dict[str, str]] = []
-    for row in response["DimensionValues"]:
-        if not row["Value"]:
-            continue
-        pre_row: Dict[str, str] = {"dimension": dimension}
-        pre_row["value"] = row["Value"]
-        pre_df.append(pre_row)
-    return pd.DataFrame(pre_df, dtype="string")
+    for response in response_iterator:
+        for row in response["DimensionValues"]:
+            if not row["Value"]:
+                continue
+            pre_row: Dict[str, str] = {"dimension": dimension}
+            pre_row["value"] = row["Value"]
+            pre_df.append(pre_row)
+        return pd.DataFrame(pre_df, dtype="string")

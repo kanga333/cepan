@@ -9,6 +9,7 @@ from cepan._dimension import (
     _RESERVATIONS_DIMENSIONS,
     _SAVINGS_PLANS_DIMENSIONS,
 )
+from cepan._filter import Dimensions
 from cepan._time_period import TimePeriod
 
 
@@ -23,6 +24,49 @@ def test_show_dimensions(mocker):
         ce.show_dimensions(context="Invalid")
 
 
+@pytest.mark.parametrize(
+    "func_args,expected_client_args",
+    [
+        # Request by Class
+        (
+            {
+                "time_period": TimePeriod(
+                    datetime.datetime(2020, 1, 1), datetime.datetime(2020, 1, 2)
+                ),
+                "dimension": "REGION",
+                "search_string": "ap",
+                "context": "COST_AND_USAGE",
+                "filter": Dimensions("REGION", ["ap-northeast-1"]),
+            },
+            {
+                "TimePeriod": {
+                    "Start": "2020-01-01",
+                    "End": "2020-01-02",
+                },
+                "Dimension": "REGION",
+                "SearchString": "ap",
+                "Context": "COST_AND_USAGE",
+                "Filter": {
+                    "Dimensions": {
+                        "Key": "REGION",
+                        "Values": ["ap-northeast-1"],
+                    },
+                },
+            },
+        ),
+    ],
+)
+def test_get_dimensions_args(mocker, func_args, expected_client_args):
+    client_mock = mocker.Mock()
+    client_mock.get_dimension_values.return_value = {
+        "DimensionValues": [],
+    }
+    mocker.patch("boto3.client", return_value=client_mock)
+    ce.get_dimension_values(**func_args)
+    kwargs = client_mock.get_dimension_values.call_args.kwargs
+    assert kwargs == expected_client_args
+
+
 def test_get_dimensions(mocker):
     client_mock = mocker.Mock()
     client_mock.get_dimension_values.return_value = {
@@ -33,8 +77,8 @@ def test_get_dimensions(mocker):
     }
     mocker.patch("boto3.client", return_value=client_mock)
     df = ce.get_dimension_values(
-        "AZ",
         TimePeriod(start=datetime.datetime(2020, 1, 1)),
+        "REGION",
     )
     assert len(df.index) == 1
     assert len(df.columns) == 2
