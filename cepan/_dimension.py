@@ -49,6 +49,20 @@ _SAVINGS_PLANS_DIMENSIONS = [
 
 
 def show_dimensions(context: str = "COST_AND_USAGE") -> List[str]:
+    """Show dimension keys.
+
+    Parameters
+    ----------
+    context : str
+        The context for the call to get_dimension_values .
+        This can be RESERVATIONS, COST_AND_USAGE or SAVINGS_PLANS.
+
+    Returns
+    -------
+    List[str]
+        Result as a Pandas DataFrame.
+
+    """
     if context == "COST_AND_USAGE":
         return _COST_AND_USAGE_DIMENSIONS
     if context == "RESERVATIONS":
@@ -68,6 +82,51 @@ def get_dimension_values(
     filter: Union[Filter, Dict[str, Any], None] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
+    """Get dimension values.
+
+    See also:
+    https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ce.html#CostExplorer.Client.get_dimension_values
+
+    Parameters
+    ----------
+    time_period : Union[TimePeriod, Dict[str, str]]
+        Sets the start and end dates for retrieving AWS costs.
+        In addition to the TimePeriod type,
+        you can directly use variables of dictionary types that boto3 can use.
+    dimension : str
+        The name of the dimension. Each dimension is available for a different context.
+    search_string : str
+        The value that you want to search the filter values for.
+    context : str
+        The context for the call to get_dimension_values.
+        This can be RESERVATIONS, COST_AND_USAGE or SAVINGS_PLANS.
+    filter : Union[Filter, Dict[str, Any]], optional
+        Filters AWS costs by different dimensions.
+        In addition to the Filter type,
+        you can directly use variables of dictionary types that boto3 can use.
+    boto3_session : boto3.Session(), optional
+        Boto3 Session. The default boto3 session will be used if session receive None.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Result as a Pandas DataFrame.
+
+    Examples
+    --------
+    >>> import cepan as ce
+    >>> from datetime import datetime, timedelta
+    >>> today = datetime.now()
+    >>> yesterdat = today - timedelta(days=1)
+    >>> df = ce.get_dimension_values(
+    ...     time_period=ce.TimePeriod(
+    ...         start=datetime(2020, 1, 1),
+    ...         end=datetime(2020, 1, 2),
+    ...     ),
+    ...     dimension="SERVICE",
+    ...     search_string="Amazon",
+    ... )
+    """
     client: boto3.client = _utils.client("ce", session)
     args: Dict[str, Any] = {
         "TimePeriod": _build_time_period(time_period),
