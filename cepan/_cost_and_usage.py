@@ -60,8 +60,8 @@ def get_cost_and_usage(
     >>> yesterdat = today - timedelta(days=1)
     >>> df = ce.get_cost_and_usage(
     ...     time_period=ce.TimePeriod(
-    ...         start=datetime(2021, 3, 1),
-    ...         end=datetime(2021, 3, 1),
+    ...         start=datetime(2020, 1, 1),
+    ...         end=datetime(2020, 1, 2),
     ...     ),
     ...     granularity="DAILY",
     ...     filter=ce.Not(ce.Dimensions("SERVICE", ["Amazon Athena"])),
