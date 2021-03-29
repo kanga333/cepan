@@ -3,7 +3,6 @@ import datetime
 import pytest
 
 import cepan as ce
-
 from cepan._filter import Dimensions
 from cepan._time_period import TimePeriod
 
