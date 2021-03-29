@@ -8,6 +8,10 @@
 
 Retrieves data from aws cost explore as a pandas dataframe.
 
+Main features
+- Support for input with type hints
+- Retrieving results as pandas.Dataframe
+
 ## Installation
 
 ```
