@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "cepan"
 version = "0.1.0"
-description = "cepan is a client library that retrieves data from aws cost explore as a pandas dataframe."
+description = "Retrieves data from aws cost explore as a pandas dataframe."
 authors = ["kanga333 <e411z7t40w@gmail.com>"]
 license = "MIT"
 readme = 'README.md'
