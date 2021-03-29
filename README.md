@@ -1,6 +1,6 @@
 # cepan
 
-[![pypi](https://img.shields.io/pypi/v/cepan?color=blue)](https://pypi.org/project/cepan/#history)
+[![Pypi Version](https://img.shields.io/pypi/v/cepan?color=blue)](https://pypi.org/project/cepan/#history)
 [![python](https://img.shields.io/pypi/pyversions/cepan.svg)](https://pypi.org/project/cepan/)
 [![test](https://github.com/kanga333/cepan/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/kanga333/cepan/actions/workflows/test.yml)
 [![lint](https://github.com/kanga333/cepan/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/kanga333/cepan/actions/workflows/lint.yml)
