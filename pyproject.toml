@@ -5,6 +5,17 @@ description = "Retrieves data from aws cost explore as a pandas dataframe."
 authors = ["kanga333 <e411z7t40w@gmail.com>"]
 license = "MIT"
 readme = 'README.md'
+repository = "https://github.com/kanga333/cepan"
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    'Programming Language :: Python :: 3.8',
+    "Programming Language :: Python :: 3.9",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
