@@ -88,7 +88,7 @@ def get_cost_and_usage(
     pre_df: List[Dict[str, str]] = []
     for response in response_iterator:
         group_definitions: List[str] = []
-        metrics_columns: Set = set()
+        metrics_columns: Set[str] = set()
         for definition in response.get("GroupDefinitions", []):
             group_definitions.append(definition["Key"])
         for row in response["ResultsByTime"]:
