@@ -52,8 +52,8 @@ All paginated results will be returned as a Dataframe.
 
 ```
           Time                        SERVICE  BlendedCost
-0   2021-03-01  Amazon Simple Storage Service   100.000000
-1   2021-03-01               AmazonCloudWatch    10.000000
+0   2020-01-01  Amazon Simple Storage Service   100.000000
+1   2020-01-01               AmazonCloudWatch    10.000000
 ```
 
 ### List of currently supported APIs
