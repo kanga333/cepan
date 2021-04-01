@@ -5,6 +5,7 @@ import pandas as pd
 
 from cepan import _utils, exceptions
 from cepan._filter import Filter, _build_filter
+from cepan._sort_by import SortBy, _build_sort_by
 from cepan._time_period import TimePeriod, _build_time_period
 
 _COST_AND_USAGE_DIMENSIONS = [
@@ -80,6 +81,8 @@ def get_dimension_values(
     search_string: Optional[str] = None,
     context: Optional[str] = None,
     filter: Union[Filter, Dict[str, Any], None] = None,
+    sort_by: Union[List[SortBy], List[Dict[str, str]], None] = None,
+    max_results: Optional[int] = None,
     session: Optional[boto3.Session] = None,
 ) -> pd.DataFrame:
     """Get dimension values.
@@ -104,6 +107,12 @@ def get_dimension_values(
         Filters AWS costs by different dimensions.
         In addition to the Filter type,
         you can directly use variables of dictionary types that boto3 can use.
+    sort_by : Union[List[SortBy], List[Dict[str, str]]], optional
+        The value by which you want to sort the data.
+        you can directly use variables of dictionary types that boto3 can use.
+    max_results: int, optional
+        This field is only used when SortBy is provided in the request.
+        The maximum number of objects that to be returned for this request.
     boto3_session : boto3.Session(), optional
         Boto3 Session. The default boto3 session will be used if session receive None.
 
@@ -138,6 +147,10 @@ def get_dimension_values(
         args["Context"] = context
     if filter:
         args["Filter"] = _build_filter(filter)
+    if sort_by:
+        args["SortBy"] = _build_sort_by(sort_by)
+    if max_results and sort_by:
+        args["MaxResults"] = max_results
     response_iterator = _utils.call_with_pagination(
         client,
         "get_dimension_values",

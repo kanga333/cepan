@@ -10,6 +10,7 @@ from cepan._dimension import (
     _SAVINGS_PLANS_DIMENSIONS,
 )
 from cepan._filter import Dimensions
+from cepan._sort_by import SortBy
 from cepan._time_period import TimePeriod
 
 
@@ -37,6 +38,8 @@ def test_show_dimensions(mocker):
                 "search_string": "ap",
                 "context": "COST_AND_USAGE",
                 "filter": Dimensions("REGION", ["ap-northeast-1"]),
+                "sort_by": [SortBy("BlendedCost"), SortBy("UnblendedCost")],
+                "max_results": 100,
             },
             {
                 "TimePeriod": {
@@ -52,6 +55,8 @@ def test_show_dimensions(mocker):
                         "Values": ["ap-northeast-1"],
                     },
                 },
+                "SortBy": [{"Key": "BlendedCost"}, {"Key": "UnblendedCost"}],
+                "MaxResults": 100,
             },
         ),
     ],
