@@ -4,6 +4,7 @@ import pytest
 
 import cepan as ce
 from cepan._filter import Dimensions
+from cepan._sort_by import SortBy
 from cepan._time_period import TimePeriod
 
 
@@ -19,6 +20,8 @@ from cepan._time_period import TimePeriod
                 "tag_key": "key",
                 "search_string": "ap",
                 "filter": Dimensions("REGION", ["ap-northeast-1"]),
+                "sort_by": [SortBy("BlendedCost"), SortBy("UnblendedCost")],
+                "max_results": 100,
             },
             {
                 "TimePeriod": {
@@ -33,6 +36,8 @@ from cepan._time_period import TimePeriod
                         "Values": ["ap-northeast-1"],
                     },
                 },
+                "SortBy": [{"Key": "BlendedCost"}, {"Key": "UnblendedCost"}],
+                "MaxResults": 100,
             },
         ),
     ],
