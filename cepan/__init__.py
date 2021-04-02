@@ -1,5 +1,6 @@
 from importlib import metadata
 
+from cepan._alias import show_service_alias
 from cepan._cost_and_usage import get_cost_and_usage
 from cepan._dimension import get_dimension_values, show_dimensions
 from cepan._filter import And, CostCategories, Dimensions, Not, Or, Tags
@@ -10,6 +11,7 @@ from cepan._time_period import TimePeriod
 __version__: str = metadata.version(__name__)
 
 __all__ = [
+    "show_service_alias",
     "show_dimensions",
     "get_dimension_values",
     "get_tags",
