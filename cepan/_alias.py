@@ -109,7 +109,7 @@ def show_service_alias() -> pd.DataFrame:
     """
     pre_df: List[Dict[str, str]] = []
     for key, aliases in _SERVICE_ALIAS.items():
-        pre_row: Dict[str, str] = {"name": key, "aliases": ",".join(aliases)}
+        pre_row: Dict[str, str] = {"service_name": key, "aliases": ",".join(aliases)}
         pre_df.append(pre_row)
     return pd.DataFrame(pre_df, dtype="string")
 
