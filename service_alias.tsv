@@ -1,0 +1,27 @@
+service_name	aliases
+Amazon Athena	Athena
+Amazon DynamoDB	DynamoDB
+Amazon EC2 Container Registry (ECR)	ECR,EC2 Container Registry
+Amazon Elastic Compute Cloud - Compute	EC2,EC2-Instances,Elastic Compute Cloud - Compute
+Amazon Elastic Container Service	ECS,Elastic Container Service
+Amazon Elastic File System	EFS,Elastic File System
+Amazon Elastic Load Balancing	ELB,EC2-ELB,Elastic Load Balancing
+Amazon ElastiCache	ElastiCache
+Amazon GuardDuty	GuardDuty
+Amazon Redshift	Redshift
+Amazon Relational Database Service	RDS,Relational Database Service
+Amazon Route 53	Route 53
+Amazon Simple Notification Service	SNS,Simple Notification Service
+Amazon Simple Queue Service	SQS,Simple Queue Services
+Amazon Simple Storage Service	S3,Simple Storage Service
+AmazonCloudWatch	CloudWatch
+AWS Budgets	Budgets
+AWS CloudTrail	CloudTrail
+AWS Config	Config
+AWS Cost Explorer	Cost Explorer
+AWS Data Transfer	Data Transfer
+AWS Glue	Glue
+AWS Key Management Service	KMS,Key Management Service
+AWS Secrets Manager	Secrets Manager
+AWS Security Hub	Security Hub
+EC2 - Other	EC2-Other

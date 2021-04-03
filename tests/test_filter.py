@@ -30,9 +30,30 @@ def test_basefilter(args, expected):
     assert f._build_base_expression() == expected
 
 
-def test_dimensions():
-    f = Dimensions("key", ["value1"])
-    assert f.build_expression() == {"Dimensions": {"Key": "key", "Values": ["value1"]}}
+@pytest.mark.parametrize(
+    "args,expected",
+    [
+        (
+            {"key": "key", "values": ["value1"]},
+            {"Dimensions": {"Key": "key", "Values": ["value1"]}},
+        ),
+        (
+            {"key": "SERVICE", "values": ["EC2", "S3"]},
+            {
+                "Dimensions": {
+                    "Key": "SERVICE",
+                    "Values": [
+                        "Amazon Elastic Compute Cloud - Compute",
+                        "Amazon Simple Storage Service",
+                    ],
+                }
+            },
+        ),
+    ],
+)
+def test_dimensions(args, expected):
+    f = Dimensions(**args)
+    assert f.build_expression() == expected
 
 
 def test_tags():

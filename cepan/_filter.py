@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Protocol, Union
 
+from cepan._alias import _resolve_service_alias
+
 
 class Filter(Protocol):
     def build_expression(self) -> Dict[str, Any]:
@@ -28,7 +30,14 @@ class Dimensions(_BaseFilter):
     """
 
     def build_expression(self) -> Dict[str, Any]:
-        return {"Dimensions": self._build_base_expression()}
+        expression: Dict[str, Any] = self._build_base_expression()
+        if expression["Key"] == "SERVICE":
+            values = []
+            for value in expression["Values"]:
+                resolved = _resolve_service_alias(value)
+                values.append(resolved)
+            expression["Values"] = values
+        return {"Dimensions": expression}
 
 
 class Tags(_BaseFilter):
