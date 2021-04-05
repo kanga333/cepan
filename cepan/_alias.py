@@ -6,6 +6,9 @@ _SERVICE_ALIAS = {
     "Amazon Athena": [
         "Athena",
     ],
+    "Amazon CloudFront": [
+        "CloudFront",
+    ],
     "Amazon DynamoDB": [
         "DynamoDB",
     ],
@@ -31,11 +34,28 @@ _SERVICE_ALIAS = {
         "EC2-ELB",
         "Elastic Load Balancing",
     ],
+    "Amazon Elastic MapReduce": [
+        "EMR",
+        "Elastic MapReduce",
+    ],
     "Amazon ElastiCache": [
         "ElastiCache",
     ],
+    "Amazon Elasticsearch Service": [
+        "ES",
+        "Amazon ES",
+        "Elasticsearch Service",
+    ],
     "Amazon GuardDuty": [
         "GuardDuty",
+    ],
+    "Amazon Kinesis": [
+        "Kinesis",
+    ],
+    "Amazon Managed Streaming for Apache Kafka": [
+        "MSK",
+        "Amazon MSK",
+        "Managed Streaming for Apache Kafka",
     ],
     "Amazon Redshift": [
         "Redshift",
@@ -46,6 +66,9 @@ _SERVICE_ALIAS = {
     ],
     "Amazon Route 53": [
         "Route 53",
+    ],
+    "Amazon SageMaker": [
+        "SageMaker",
     ],
     "Amazon Simple Notification Service": [
         "SNS",
@@ -77,6 +100,9 @@ _SERVICE_ALIAS = {
     "AWS Data Transfer": [
         "Data Transfer",
     ],
+    "AWS Elemental MediaStore": [
+        "Elemental MediaStore",
+    ],
     "AWS Glue": [
         "Glue",
     ],
@@ -84,11 +110,20 @@ _SERVICE_ALIAS = {
         "KMS",
         "Key Management Service",
     ],
+    "AWS Lambda": [
+        "Lambda",
+    ],
     "AWS Secrets Manager": [
         "Secrets Manager",
     ],
     "AWS Security Hub": [
         "Security Hub",
+    ],
+    "AWS Service Catalog": [
+        "Service Catalog",
+    ],
+    "AWS Step Functions": [
+        "Step Functions",
     ],
     "EC2 - Other": [
         "EC2-Other",
